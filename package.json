@@ -28,6 +28,7 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
+    "@prisma/cli": "^2.0.1",
     "sirv-cli": "^0.4.4"
   }
 }
