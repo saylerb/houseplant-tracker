@@ -22,7 +22,7 @@ const plantNames = [
   "Button Fern"
 ];
 
-async function main() {
+async function seed() {
   const plantPromises = plantNames.map(name => {
     return prisma.plant.create({
       data: {
@@ -38,7 +38,7 @@ async function main() {
   console.log(allPlants);
 }
 
-main()
+seed()
   .catch(e => {
     throw e;
   })

@@ -1,26 +1,17 @@
 <script>
-  export let name;
+  import { onMount } from "svelte";
+  import { getPlants } from "./api";
 
-  let count = 0;
+  let plants = [];
 
-  function increment() {
-    count = count + 1;
-  }
+  onMount(async () => {
+    plants = getPlants();
+  });
 </script>
 
 <style>
   main {
-    text-align: center;
-    padding: 1em;
     max-width: 240px;
-    margin: 0 auto;
-  }
-
-  h1 {
-    color: #ff3e00;
-    text-transform: uppercase;
-    font-size: 4em;
-    font-weight: 100;
   }
 
   @media (min-width: 640px) {
@@ -31,12 +22,17 @@
 </style>
 
 <main>
-  <h1>Hello {name}!</h1>
-  <p>
-    Visit the
-    <a href="https://svelte.dev/tutorial">Svelte tutorial</a>
-    to learn how to build Svelte apps.
-  </p>
-  <h1 data-testid="count">{count}</h1>
-  <button on:click={increment}>+</button>
+  <h1>Plant Tracker!</h1>
+
+  {#await plants}
+    loading...
+  {:then data}
+    <ul>
+      {#each data as plant}
+        <li>{plant.name}</li>
+      {/each}
+    </ul>
+  {:catch error}
+    There was a problem fetching the list of plants
+  {/await}
 </main>
