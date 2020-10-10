@@ -37,16 +37,16 @@ Seed the test data
 node ./src/seed.js
 ```
 
-Then start [Rollup](https://rollupjs.org) to run the frontend dev server:
-
-```bash
-npm run dev
-```
-
 Start the backend server in a separate shell (Runs on port 3000)
 
 ```bash
 node ./src/server.js
+```
+
+Then start [Rollup](https://rollupjs.org) to run the frontend dev server:
+
+```bash
+npm run dev
 ```
 
 Navigate to [localhost:5000](http://localhost:5000).
