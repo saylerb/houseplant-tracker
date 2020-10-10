@@ -17,6 +17,14 @@ Start a postgres server in docker
 docker run --rm --name houseplant-tracker-test -e POSTGRES_PASSWORD=replaceme -d -p 5432:5432 postgres
 ```
 
+Prepare .env file
+
+Prisma looks at the .env for database credentials inside the prisma directory. For example:
+
+```
+DATABASE_URL=postgresql://postgres:replaceme@localhost
+```
+
 Run the db migrations
 
 ```bash
