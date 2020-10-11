@@ -1,16 +1,19 @@
-const { PrismaClient } = require("@prisma/client");
-var express = require("express");
-var app = express();
-var cors = require("cors");
-const port = 3000;
+import sirv from "sirv";
+import express from "express";
+import compression from "compression";
+import * as sapper from "@sapper/server";
 
-const prisma = new PrismaClient();
+const { PORT, NODE_ENV } = process.env;
+const dev = NODE_ENV === "development";
 
-app.get("/", cors(), async function(req, res) {
-  const allPlants = await prisma.plant.findMany();
-  return res.json(allPlants);
-});
+const port = PORT ? PORT : 8080;
 
-app.listen(port, () =>
-  console.log(`Example app listening at http://localhost:${port}`)
-);
+express()
+  .use(
+    compression({ threshold: 0 }),
+    sirv("static", { dev }),
+    sapper.middleware()
+  )
+  .listen(port , err => {
+    if (err) console.log("error", err);
+  });

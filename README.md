@@ -71,5 +71,4 @@ To create an optimised version of the app:
 npm run build
 ```
 
-You can run the newly built app with `npm run start`. 
-
+You can run the newly built app with `npm run start`.

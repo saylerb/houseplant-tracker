@@ -41,5 +41,3 @@ migration ..20200621160431-create_plant_table
 +  updatedAt DateTime @default(now())
 +}
 ```
-
-

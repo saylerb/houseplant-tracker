@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { getPlants } from "./api";
+  import { getPlants } from "../api";
 
   let plants = [];
 
