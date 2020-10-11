@@ -2,7 +2,7 @@
   "name": "houseplant-tracker",
   "version": "1.0.0",
   "scripts": {
-	  "start": "node __sapper__/build",
+    "start": "node __sapper__/build",
     "build": "sapper build --legacy",
     "dev": "sapper dev",
     "export": "sapper export --legacy",
