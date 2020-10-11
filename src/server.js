@@ -1,6 +1,7 @@
 import sirv from "sirv";
 import express from "express";
 import compression from "compression";
+import bodyParser from "body-parser";
 import * as sapper from "@sapper/server";
 
 const { PORT, NODE_ENV } = process.env;
@@ -9,6 +10,7 @@ const dev = NODE_ENV === "development";
 const port = PORT ? PORT : 8080;
 
 express()
+  .use(bodyParser.json())
   .use(
     compression({ threshold: 0 }),
     sirv("static", { dev }),

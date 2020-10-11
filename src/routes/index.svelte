@@ -1,18 +1,36 @@
 <script>
   import { onMount } from "svelte";
-  import { getPlants } from "../api";
+  import { getPlants, updatePlant } from "../api";
   import { Temporal } from "proposal-temporal/lib/index.mjs";
 
   let plants = [];
 
-  onMount(async () => {
-    plants = getPlants().then(json =>
-      json.map(plant => ({
-        ...plant,
-        formattedDate: Temporal.Date.from(plant.lastWateredAt).toString()
-      }))
+  async function allPlants() {
+    return getPlants().then(json =>
+      json
+        .map(plant => ({
+          ...plant,
+          formattedDate: Temporal.Date.from(plant.lastWateredAt).toString(),
+          compare: Temporal.DateTime.from(plant.lastWateredAt)
+        }))
+        .sort((a, b) => a.id - b.id)
     );
+  }
+
+  onMount(async () => {
+    plants = allPlants();
   });
+
+  async function handleSubmit(event) {
+    const id = event.target.elements[0].value;
+    const lastWateredAt = event.target.elements[1].value;
+
+    const data = { id, lastWateredAt };
+
+    await updatePlant(data);
+
+    plants = allPlants();
+  }
 </script>
 
 <style>
@@ -34,8 +52,16 @@
     loading...
   {:then data}
     <ul>
-      {#each data as plant}
-        <li>{plant.name} - {plant.formattedDate}</li>
+      {#each data as plant (plant.id)}
+        <li>
+          {plant.name} - {plant.formattedDate}
+          <form on:submit|preventDefault={handleSubmit}>
+            <input type="hidden" value={plant.id} />
+            <input type="datetime-local" />
+            <input type="submit" />
+          </form>
+
+        </li>
       {/each}
     </ul>
   {:catch error}
