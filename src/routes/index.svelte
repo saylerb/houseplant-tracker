@@ -1,11 +1,17 @@
 <script>
   import { onMount } from "svelte";
   import { getPlants } from "../api";
+  import { Temporal } from "proposal-temporal/lib/index.mjs";
 
   let plants = [];
 
   onMount(async () => {
-    plants = getPlants();
+    plants = getPlants().then(json =>
+      json.map(plant => ({
+        ...plant,
+        formattedDate: Temporal.Date.from(plant.lastWateredAt).toString()
+      }))
+    );
   });
 </script>
 
@@ -22,14 +28,14 @@
 </style>
 
 <main>
-  <h1>Plant Tracker!</h1>
+  <h1>Name - Last Watered At</h1>
 
   {#await plants}
     loading...
   {:then data}
     <ul>
       {#each data as plant}
-        <li>{plant.name}</li>
+        <li>{plant.name} - {plant.formattedDate}</li>
       {/each}
     </ul>
   {:catch error}
