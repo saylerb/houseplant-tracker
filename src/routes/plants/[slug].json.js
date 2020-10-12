@@ -25,3 +25,13 @@ export async function put(req, res) {
 
   return res.json(updated);
 }
+
+export async function del(req, res) {
+  const { slug } = req.params;
+
+  const deleted = await prisma.plant.delete({
+    where: { id: parseInt(slug) }
+  });
+
+  return res.json(deleted);
+}

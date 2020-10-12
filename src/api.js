@@ -14,3 +14,9 @@ export async function updatePlant(data) {
     }
   }).then(response => response.json());
 }
+
+export async function deletePlant(id) {
+  return fetch(`/plants/${id}.json`, {
+    method: "DELETE"
+  }).then(response => response.json());
+}
