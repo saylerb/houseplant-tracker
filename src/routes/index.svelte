@@ -3,17 +3,23 @@
   import { getPlants, updatePlant, deletePlant } from "../api";
   import { Temporal } from "proposal-temporal/lib/index.mjs";
 
+  const dev = true; // TODO: Be able to set this during build
+
   let plants = [];
 
   async function allPlants() {
     return getPlants().then(json =>
       json
-        .map(plant => ({
-          ...plant,
-          formattedDate: Temporal.Date.from(plant.lastWateredAt).toString(),
-          compare: Temporal.DateTime.from(plant.lastWateredAt)
-        }))
-        .sort((a, b) => a.id - b.id)
+        .map(plant => {
+          const date = Temporal.DateTime.from(plant.lastWateredAt);
+
+          return {
+            ...plant,
+            formattedDate: Temporal.Date.from(date).toString(),
+            compare: date
+          };
+        })
+        .sort((a, b) => Temporal.DateTime.compare(a.compare, b.compare))
     );
   }
 
@@ -76,5 +82,6 @@
     </ul>
   {:catch error}
     There was a problem fetching the list of plants
+    {#if dev}{error.stack}{/if}
   {/await}
 </main>
