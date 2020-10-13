@@ -6,9 +6,14 @@ export async function get(req, res) {
   return res.json(allPlants);
 }
 
-export async function put(req, res) {
-  const updated = await prisma.plant.update({
-    where: {},
-    data: {}
+export async function post(req, res) {
+  const { name } = req.body;
+
+  const created = await prisma.plant.create({
+    data: {
+      name
+    }
   });
+
+  return res.json(created);
 }

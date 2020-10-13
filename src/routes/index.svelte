@@ -1,11 +1,12 @@
 <script>
   import { onMount } from "svelte";
-  import { getPlants, updatePlant, deletePlant } from "../api";
+  import { getPlants, updatePlant, deletePlant, createPlant } from "../api";
   import { Temporal } from "proposal-temporal/lib/index.mjs";
 
   const dev = true; // TODO: Be able to set this during build
 
-  let plants = [];
+  let plants = Promise.resolve([]);
+  let value = "";
 
   async function allPlants() {
     return getPlants().then(json =>
@@ -43,6 +44,12 @@
 
     plants = allPlants();
   }
+
+  async function handleNewPlantSubmit() {
+    await createPlant({ name: value });
+
+    plants = allPlants();
+  }
 </script>
 
 <style>
@@ -63,6 +70,12 @@
 
 <main>
   <h1>Name - Last Watered At</h1>
+
+  <form on:submit|preventDefault={handleNewPlantSubmit}>
+    <label for="newPlant">Add Plant</label>
+    <input type="text" bind:value name="newPlant" />
+    <input type="submit" />
+  </form>
 
   {#await plants}
     loading...

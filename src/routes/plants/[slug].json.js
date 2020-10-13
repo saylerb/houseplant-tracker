@@ -35,3 +35,15 @@ export async function del(req, res) {
 
   return res.json(deleted);
 }
+
+export async function post(req, res) {
+  const { slug } = req.params;
+
+  const { name } = req.body;
+
+  const created = await prisma.plant.create({
+    data: {
+      name
+    }
+  });
+}
