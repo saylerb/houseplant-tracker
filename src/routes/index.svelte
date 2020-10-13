@@ -14,19 +14,9 @@
         .map(plant => {
           const date = Temporal.DateTime.from(plant.lastWateredAt);
 
-          const { days, hours } = Temporal.now
-            .dateTime()
-            .difference(date)
-            .getFields();
-
-          const elapsed = `${days} days ${hours} hours ago`;
-
-          const formattedDate = Temporal.Date.from(date).toString();
-
           return {
             ...plant,
-            formattedDate,
-            elapsed,
+            formattedDate: Temporal.Date.from(date).toString(),
             compare: date
           };
         })
@@ -93,7 +83,7 @@
     <ul>
       {#each data as plant (plant.id)}
         <li>
-          <div>{plant.name} - {plant.elapsed}</div>
+          <div>{plant.name} - {plant.formattedDate}</div>
           <form class="form" on:submit|preventDefault={handleSubmit}>
             <input type="hidden" value={plant.id} />
             <input type="datetime-local" />
