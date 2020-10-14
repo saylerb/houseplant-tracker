@@ -65,6 +65,7 @@ export default {
       !dev &&
         terser({
           module: true
+          // keep_classnames: true
         })
     ],
 

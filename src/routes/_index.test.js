@@ -11,5 +11,5 @@ test("app loads list of plants on mount", async () => {
 
   const { findByText } = render(Index);
 
-  expect(await findByText("plant one - 2020-10-13")).toBeInTheDocument();
+  expect(await findByText(/plant one./)).toBeInTheDocument();
 });

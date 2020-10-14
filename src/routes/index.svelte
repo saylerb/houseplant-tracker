@@ -14,12 +14,15 @@
         .map(plant => {
           const date = Temporal.DateTime.from(plant.lastWateredAt);
 
-          const { days, hours } = Temporal.now
-            .dateTime()
-            .difference(date)
-            .getFields();
+          const { seconds } = Temporal.now
+            .instant()
+            .difference(Temporal.Instant.from(plant.lastWateredAt));
 
-          const elapsed = `${days} days ${hours} hours ago`;
+          const SECONDS_IN_A_DAY = 86400;
+
+          const days = Math.floor(seconds / SECONDS_IN_A_DAY);
+
+          const elapsed = `${days} days ago`;
 
           const formattedDate = Temporal.Date.from(date).toString();
 
