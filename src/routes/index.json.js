@@ -3,7 +3,12 @@ const prisma = new PrismaClient();
 
 export async function get(req, res) {
   const allPlants = await prisma.plant.findMany();
-  return res.json(allPlants);
+
+  res.writeHead(200, {
+    "Content-Type": "application/json"
+  });
+
+  res.end(JSON.stringify(allPlants));
 }
 
 export async function post(req, res) {
@@ -14,6 +19,9 @@ export async function post(req, res) {
       name
     }
   });
+  res.writeHead(200, {
+    "Content-Type": "application/json"
+  });
 
-  return res.json(created);
+  res.end(JSON.stringify(created));
 }

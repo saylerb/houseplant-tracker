@@ -22,8 +22,11 @@ export async function put(req, res) {
       lastWateredAt: lastWateredAtDate
     }
   });
+  res.writeHead(200, {
+    "Content-Type": "application/json"
+  });
 
-  return res.json(updated);
+  res.end(JSON.stringify(updated));
 }
 
 export async function del(req, res) {
@@ -33,7 +36,11 @@ export async function del(req, res) {
     where: { id: parseInt(slug) }
   });
 
-  return res.json(deleted);
+  res.writeHead(200, {
+    "Content-Type": "application/json"
+  });
+
+  res.end(JSON.stringify(deleted));
 }
 
 export async function post(req, res) {
@@ -46,4 +53,10 @@ export async function post(req, res) {
       name
     }
   });
+
+  res.writeHead(200, {
+    "Content-Type": "application/json"
+  });
+
+  res.end(JSON.stringify(created));
 }
