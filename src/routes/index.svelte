@@ -1,4 +1,4 @@
-<script>
+<script lange="ts">
   import { onMount } from "svelte";
   import { getPlants, updatePlant, deletePlant, createPlant } from "../api";
   import { Temporal } from "proposal-temporal/lib/index.mjs";
@@ -78,6 +78,10 @@
 
   form {
     display: inline;
+  }
+
+  ul {
+    list-style-type: none;
   }
 </style>
 
