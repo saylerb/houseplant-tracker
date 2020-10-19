@@ -1,11 +1,12 @@
-<script lange="ts">
+<script lang="ts">
   import { onMount } from "svelte";
   import { getPlants, updatePlant, deletePlant, createPlant } from "../api";
-  import { Temporal } from "proposal-temporal/lib/index.mjs";
+  import { Temporal } from "proposal-temporal";
+  import type { Plant } from "@prisma/client";
 
   const dev = true; // TODO: Be able to set this during build
 
-  let plants = Promise.resolve([]);
+  let plants: Promise<Plant[]> = Promise.resolve([]);
   let value = "";
 
   async function allPlants() {
