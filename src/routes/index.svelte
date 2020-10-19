@@ -53,9 +53,10 @@
   }
 
   async function handleDelete(id) {
-    await deletePlant(id);
-
-    plants = allPlants();
+    if (window.confirm("Delete plant?")) {
+      await deletePlant(id);
+      plants = allPlants();
+    }
   }
 
   async function handleNewPlantSubmit() {
