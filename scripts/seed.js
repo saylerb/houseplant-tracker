@@ -19,15 +19,15 @@ const plantNames = [
   "Spidy 3",
   "Howarthia",
   "Philodendron Moonlight",
-  "Button Fern"
+  "Button Fern",
 ];
 
 async function seed() {
-  const plantPromises = plantNames.map(name => {
+  const plantPromises = plantNames.map((name) => {
     return prisma.plant.create({
       data: {
-        name
-      }
+        name,
+      },
     });
   });
 
@@ -39,7 +39,7 @@ async function seed() {
 }
 
 seed()
-  .catch(e => {
+  .catch((e) => {
     throw e;
   })
   .finally(async () => {

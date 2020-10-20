@@ -19,11 +19,11 @@ export async function put(req, res) {
   const updated = await prisma.plant.update({
     where: { id: parseInt(slug) },
     data: {
-      lastWateredAt: lastWateredAtDate
-    }
+      lastWateredAt: lastWateredAtDate,
+    },
   });
   res.writeHead(200, {
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
   });
 
   res.end(JSON.stringify(updated));
@@ -33,11 +33,11 @@ export async function del(req, res) {
   const { slug } = req.params;
 
   const deleted = await prisma.plant.delete({
-    where: { id: parseInt(slug) }
+    where: { id: parseInt(slug) },
   });
 
   res.writeHead(200, {
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
   });
 
   res.end(JSON.stringify(deleted));
@@ -50,12 +50,12 @@ export async function post(req, res) {
 
   const created = await prisma.plant.create({
     data: {
-      name
-    }
+      name,
+    },
   });
 
   res.writeHead(200, {
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
   });
 
   res.end(JSON.stringify(created));

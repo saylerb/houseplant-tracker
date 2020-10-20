@@ -6,7 +6,7 @@ jest.mock("../api");
 
 test("app loads list of plants on mount", async () => {
   getPlants.mockResolvedValue([
-    { name: "plant one", lastWateredAt: "2020-10-13T00:04:20.386Z" }
+    { name: "plant one", lastWateredAt: "2020-10-13T00:04:20.386Z" },
   ]);
 
   const { findByText } = render(Index);

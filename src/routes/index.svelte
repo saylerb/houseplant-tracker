@@ -10,9 +10,9 @@
   let value = "";
 
   async function allPlants() {
-    return getPlants().then(json =>
+    return getPlants().then((json) =>
       json
-        .map(plant => {
+        .map((plant) => {
           const date = Temporal.DateTime.from(plant.lastWateredAt);
 
           const { seconds } = Temporal.now
@@ -31,7 +31,7 @@
             ...plant,
             formattedDate,
             elapsed,
-            compare: date
+            compare: date,
           };
         })
         .sort((a, b) => Temporal.DateTime.compare(a.compare, b.compare))
