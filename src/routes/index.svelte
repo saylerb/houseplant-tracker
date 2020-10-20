@@ -109,6 +109,20 @@
     border: solid 1px lightgray;
     padding: 1em;
   }
+
+  .elapsed {
+    color: darkgray;
+    display: inline;
+    font-style: italic;
+  }
+  .plant-details {
+    margin-bottom: 0.5em;
+  }
+
+  .name {
+    display: inline;
+    margin-right: 0.25em;
+  }
 </style>
 
 <main>
@@ -124,7 +138,10 @@
     <ul>
       {#each data as plant (plant.id)}
         <li>
-          <h3>{plant.name} - {plant.elapsed}</h3>
+          <div class="plant-details">
+            <h3 class="name">{plant.name}</h3>
+            <span class="elapsed">watered {plant.elapsed}</span>
+          </div>
 
           <div class="controls">
             <button on:click={() => handleWatered(plant.id)}>Watered!</button>
