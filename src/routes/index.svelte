@@ -13,6 +13,7 @@
     elapsed: string;
   }
 
+  // TODO: the typing of Plant is not quite correct, since the dates are strings in the frontend
   type PlantWithElapsedTime = Plant & HasElapsedTime;
 
   async function allPlants(): Promise<PlantWithElapsedTime[]> {
@@ -54,17 +55,6 @@
     plants = allPlants();
   });
 
-  async function handleSubmit(event: any) {
-    const id = event.target.elements[0].value;
-    const lastWateredAt = event.target.elements[1].value;
-
-    const data = { id, lastWateredAt };
-
-    await updatePlant(data);
-
-    plants = allPlants();
-  }
-
   async function handleDelete(id: number) {
     if (window.confirm("Delete plant?")) {
       await deletePlant(id);
@@ -74,6 +64,16 @@
 
   async function handleNewPlantSubmit() {
     await createPlant({ name: value });
+
+    plants = allPlants();
+  }
+
+  async function handleWatered(id: number) {
+    const lastWateredAt = Temporal.now.dateTime().toString();
+
+    const data = { id, lastWateredAt };
+
+    await updatePlant(data);
 
     plants = allPlants();
   }
@@ -94,8 +94,19 @@
     display: inline;
   }
 
+  .controls {
+    display: flex;
+    justify-content: space-between;
+  }
+
   ul {
     list-style-type: none;
+  }
+
+  li {
+    margin-bottom: 1em;
+    border: solid 1px lightgray;
+    padding: 1em;
   }
 </style>
 
@@ -114,13 +125,13 @@
     <ul>
       {#each data as plant (plant.id)}
         <li>
-          <div>{plant.name} - {plant.elapsed}</div>
-          <form class="form" on:submit|preventDefault={handleSubmit}>
-            <input type="hidden" value={plant.id} />
-            <input type="datetime-local" />
-            <input type="submit" />
-          </form>
-          <button on:click={() => handleDelete(plant.id)}>X</button>
+          <h3>{plant.name} - {plant.elapsed}</h3>
+
+          <div class="controls">
+            <button on:click={() => handleWatered(plant.id)}>Watered!</button>
+            <a href={`/plants/${plant.id}`}>Edit</a>
+            <button on:click={() => handleDelete(plant.id)}>X</button>
+          </div>
         </li>
       {/each}
     </ul>

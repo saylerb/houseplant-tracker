@@ -2,6 +2,10 @@ export async function getPlants() {
   return fetch("/index.json").then(response => response.json());
 }
 
+export async function getOnePlant(id: number) {
+  return fetch(`/plants/${id}.json`).then(response => response.json());
+}
+
 export async function createPlant(data: any) {
   return fetch(`/index.json`, {
     method: "POST",
@@ -12,10 +16,9 @@ export async function createPlant(data: any) {
   }).then(response => response.json());
 }
 
-export async function updatePlant(data: { id: any; }) {
+export async function updatePlant(data: { id: any; lastWateredAt: string }) {
   const { id } = data;
 
-  console.log("client side data: ", data);
   return fetch(`/plants/${id}.json`, {
     method: "PUT",
     body: JSON.stringify(data),

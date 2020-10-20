@@ -4,21 +4,26 @@ const prisma = new PrismaClient();
 export async function get(req, res) {
   const { slug } = req.params;
 
-  const data = await prisma.plant.findOne({ where: { id: parseInt(slug) } });
+  const one = await prisma.plant.findOne({ where: { id: parseInt(slug) } });
 
-  return res.json(data);
+  res.writeHead(200, {
+    "Content-Type" : "application/json"
+  })
+
+  res.end(JSON.stringify(one))
 }
 
 export async function put(req, res) {
   const { slug } = req.params;
 
-  const { lastWateredAt } = req.body;
+  const { lastWateredAt, name } = req.body;
 
   const lastWateredAtDate = new Date(lastWateredAt);
 
   const updated = await prisma.plant.update({
     where: { id: parseInt(slug) },
     data: {
+      name,
       lastWateredAt: lastWateredAtDate,
     },
   });
