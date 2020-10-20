@@ -6,13 +6,19 @@
 
   const dev = true; // TODO: Be able to set this during build
 
-  let plants: Promise<Plant[]> = Promise.resolve([]);
+  let plants: Promise<PlantWithElapsedTime[]> = Promise.resolve([]);
   let value = "";
 
-  async function allPlants() {
+  interface HasElapsedTime {
+    elapsed: string;
+  }
+
+  type PlantWithElapsedTime = Plant & HasElapsedTime;
+
+  async function allPlants(): Promise<PlantWithElapsedTime[]> {
     return getPlants().then((json) =>
       json
-        .map((plant) => {
+        .map((plant: { lastWateredAt: string }) => {
           const date = Temporal.DateTime.from(plant.lastWateredAt);
 
           const { seconds } = Temporal.now
@@ -34,7 +40,13 @@
             compare: date,
           };
         })
-        .sort((a, b) => Temporal.DateTime.compare(a.compare, b.compare))
+
+        .sort(
+          (
+            a: { compare: Temporal.DateTime },
+            b: { compare: Temporal.DateTime }
+          ) => Temporal.DateTime.compare(a.compare, b.compare)
+        )
     );
   }
 
@@ -42,7 +54,7 @@
     plants = allPlants();
   });
 
-  async function handleSubmit(event) {
+  async function handleSubmit(event: any) {
     const id = event.target.elements[0].value;
     const lastWateredAt = event.target.elements[1].value;
 
@@ -53,7 +65,7 @@
     plants = allPlants();
   }
 
-  async function handleDelete(id) {
+  async function handleDelete(id: number) {
     if (window.confirm("Delete plant?")) {
       await deletePlant(id);
       plants = allPlants();
