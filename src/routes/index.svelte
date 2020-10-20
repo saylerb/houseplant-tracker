@@ -81,7 +81,7 @@
 
 <style>
   main {
-    max-width: 240px;
+    max-width: 300px;
   }
 
   @media (min-width: 640px) {
@@ -90,8 +90,8 @@
     }
   }
 
-  form {
-    display: inline;
+  input {
+    margin-bottom: 10px;
   }
 
   .controls {
@@ -100,6 +100,7 @@
   }
 
   ul {
+    padding: 0;
     list-style-type: none;
   }
 
@@ -111,8 +112,6 @@
 </style>
 
 <main>
-  <h1>Name - Last Watered At</h1>
-
   <form on:submit|preventDefault={handleNewPlantSubmit}>
     <label for="newPlant">Add Plant</label>
     <input type="text" bind:value name="newPlant" />
