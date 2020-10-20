@@ -106,6 +106,7 @@
 
   li {
     margin-bottom: 1em;
+    border-radius: 0.25rem;
     border: solid 1px lightgray;
     padding: 1em;
   }
@@ -123,13 +124,31 @@
     display: inline;
     margin-right: 0.25em;
   }
+
+  button,
+  input {
+    border-radius: 0.1em;
+    border: 1px solid #dfdfdf;
+  }
+
+  input[type="submit"] {
+    padding: 1px 6px;
+    font-weight: 400;
+  }
+
+  input[type="text"] {
+    height: 20px;
+  }
+
+  form > input {
+    margin-bottom: 0;
+  }
 </style>
 
 <main>
   <form on:submit|preventDefault={handleNewPlantSubmit}>
-    <label for="newPlant">Add Plant</label>
     <input type="text" bind:value name="newPlant" />
-    <input type="submit" />
+    <input type="submit" value="Add Plant" />
   </form>
 
   {#await plants}
