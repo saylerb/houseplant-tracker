@@ -1,3 +1,4 @@
 # Prisma Migrate lockfile v1
 
 20200621160431-create_plant_table
+20201025211947-create_person_table

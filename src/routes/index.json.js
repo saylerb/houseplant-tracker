@@ -17,8 +17,14 @@ export async function post(req, res) {
   const created = await prisma.plant.create({
     data: {
       name,
+      owner: {
+        connect: {
+          email: "sayler.b@gmail.com",
+        },
+      },
     },
   });
+
   res.writeHead(200, {
     "Content-Type": "application/json",
   });
