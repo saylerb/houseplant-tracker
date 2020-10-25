@@ -2,9 +2,9 @@
   "name": "houseplant-tracker",
   "version": "1.0.0",
   "scripts": {
-    "start": "node __sapper__/build",
-    "build": "npm run migrate && sapper build --legacy",
-    "migrate": "prisma migrate up --experimental && prisma generate",
+    "start": "npm run migrate && node __sapper__/build",
+    "build": "sapper build --legacy",
+    "migrate": "prisma migrate up --experimental",
     "dev": "sapper dev",
     "export": "sapper export --legacy",
     "test": "jest src",
