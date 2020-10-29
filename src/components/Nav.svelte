@@ -1,5 +1,23 @@
 <script lang="ts">
+  import { onMount } from "svelte";
+  import { currentLoggedInUser } from "../stores";
+
+  import { goto } from "@sapper/app";
   export let segment: string;
+
+  onMount(async () => {
+    const response = await fetch("/loggedInUser.json");
+
+    if (response.status === 200) {
+      const json = await response.json();
+
+      currentLoggedInUser.set(json);
+    } else if (response.status === 404) {
+      goto("/login");
+    }
+  });
+
+  // $: console.log("current user:", $currentLoggedInUser);
 </script>
 
 <style>
@@ -46,6 +64,23 @@
     padding: 1em 0.5em;
     display: block;
   }
+
+  /* remove default button styling for log out */
+  button {
+    display: inline-block;
+    font-weight: 300;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    padding: 1em 0.5em;
+    border: none;
+    margin: 0;
+    background: transparent;
+    cursor: pointer;
+    transition: background 250ms ease-in-out, transform 150ms ease;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
 </style>
 
 <nav>
@@ -60,5 +95,24 @@
         about
       </a>
     </li>
+    {#if $currentLoggedInUser}
+      <li><a href="login">{$currentLoggedInUser.name}</a></li>
+      <li>
+        <button
+          class="logout"
+          on:click={() => {
+            fetch('/logout.json').then((response) => {
+              if (response.status === 200) {
+                currentLoggedInUser.set(undefined);
+                goto('./login');
+              } else {
+                throw Error('Could not log you out!');
+              }
+            });
+          }}>log out</button>
+      </li>
+    {:else}
+      <li><a href="login">log in</a></li>
+    {/if}
   </ul>
 </nav>

@@ -1,5 +1,8 @@
 export async function getPlants() {
-  return fetch("/index.json").then(response => response.json());
+  return fetch("/index.json").then(response => {
+    if (response.status === 200) return response.json()
+    throw Error("Could not fetch plants")
+  })
 }
 
 export async function getOnePlant(id: number) {

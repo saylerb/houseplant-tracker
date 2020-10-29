@@ -2,7 +2,20 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 export async function get(req, res) {
-  const allPlants = await prisma.plant.findMany();
+  // TODO: Is there a better way to check if you're logged in?
+  if (!req.userId) {
+    res.writeHead(404);
+    res.end();
+    return;
+  }
+
+  const allPlants = await prisma.plant.findMany({
+    where: {
+      owner: {
+        id: req.userId,
+      },
+    },
+  });
 
   res.writeHead(200, {
     "Content-Type": "application/json",
@@ -12,14 +25,17 @@ export async function get(req, res) {
 }
 
 export async function post(req, res) {
-  const { name } = req.body;
+  const {
+    body: { name },
+    userId,
+  } = req;
 
   const created = await prisma.plant.create({
     data: {
       name,
       owner: {
         connect: {
-          email: "sayler.b@gmail.com",
+          id: userId,
         },
       },
     },

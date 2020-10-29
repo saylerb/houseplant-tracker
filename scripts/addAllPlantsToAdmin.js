@@ -9,15 +9,11 @@ const SALT_ROUNDS = 12;
 async function createPassword() {
   const hashed = await bcrypt.hash(PLAINTEXT_PASSWORD, SALT_ROUNDS);
 
-  console.log({ hashed });
-
   return hashed;
 }
 
 async function getAllPlants() {
   const allPlants = await prisma.plant.findMany();
-
-  console.log("All plants: ", allPlants);
 
   return allPlants;
 }
