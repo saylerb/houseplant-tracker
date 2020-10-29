@@ -4,7 +4,7 @@
   import { Temporal } from "proposal-temporal";
   import type { Plant } from "@prisma/client";
 
-  const dev = true; // TODO: Be able to set this during build
+  const dev = process.env.NODE_ENV === "development";
 
   let plants: Promise<PlantWithElapsedTime[]> = Promise.resolve([]);
   let value = "";
