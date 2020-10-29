@@ -34,7 +34,7 @@ async function createUser() {
   const admin = await prisma.person.create({
     data: {
       name: "admin",
-      email: "sayler.b@gmail.com",
+      email: "admin@houseplant.life",
       password: await createPassword(),
     },
   });

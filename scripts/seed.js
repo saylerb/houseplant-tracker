@@ -21,12 +21,31 @@ const plantNames = [
   "Philodendron Moonlight",
   "Button Fern",
 ];
+const password = process.env.PLAINTEXT_PASSWORD;
 
-async function seed() {
+console.log({ password });
+
+async function createOrUpdateAdminPerson() {
+  const person = await prisma.person.upsert({
+    where: { id: 1 },
+    update: { email: "admin@houseplant.life" },
+    create: {
+      email: "admin@houseplant.life",
+      password,
+    },
+  });
+
+  return person;
+}
+
+async function seed(person) {
   const plantPromises = plantNames.map((name) => {
     return prisma.plant.create({
       data: {
         name,
+        owner: {
+          connect: { id: person.id },
+        },
       },
     });
   });
@@ -38,7 +57,8 @@ async function seed() {
   console.log(allPlants);
 }
 
-seed()
+createOrUpdateAdminPerson()
+  .then((person) => seed(person))
   .catch((e) => {
     throw e;
   })
