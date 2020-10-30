@@ -1,23 +1,8 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import { currentLoggedInUser } from "../stores";
 
   import { goto } from "@sapper/app";
   export let segment: string;
-
-  onMount(async () => {
-    const response = await fetch("/loggedInUser.json");
-
-    if (response.status === 200) {
-      const json = await response.json();
-
-      currentLoggedInUser.set(json);
-    } else if (response.status === 404) {
-      goto("/login");
-    }
-  });
-
-  // $: console.log("current user:", $currentLoggedInUser);
 </script>
 
 <style>

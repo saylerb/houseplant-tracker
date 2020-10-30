@@ -2,9 +2,9 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 export async function get(req, res) {
-  // TODO: Is there a better way to check if you're logged in?
+  // TODO: Probably want to move this to the session store
   if (!req.userId) {
-    res.writeHead(404);
+    res.writeHead(403);
     res.end();
     return;
   }

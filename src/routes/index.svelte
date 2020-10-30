@@ -1,59 +1,73 @@
+<script context="module">
+  export async function preload() {
+    return this.fetch("/index.json")
+      .then((response) => {
+        if (response.status === 200) return response.json();
+        if (response.status === 403) return this.redirect(302, "login");
+      })
+      .then((json) => ({ initPlants: json }));
+  }
+</script>
+
 <script lang="ts">
-  import { onMount } from "svelte";
   import { getPlants, updatePlant, deletePlant, createPlant } from "../api";
   import { Temporal } from "proposal-temporal";
   import type { Plant } from "@prisma/client";
 
   const dev = process.env.NODE_ENV === "development";
 
-  let plants: Promise<PlantWithElapsedTime[]> = Promise.resolve([]);
+  export let initPlants;
+
+  let plants: Promise<PlantWithElapsedTime[]> = calculateElapsedTime(
+    initPlants
+  );
+
   let value = "";
 
   interface HasElapsedTime {
     elapsed: string;
   }
 
-  // TODO: the typing of Plant is not quite correct, since the dates are strings in the frontend
+  // TODO: the typing of Plant is not quite correct,
+  // since the dates are strings in the frontend
   type PlantWithElapsedTime = Plant & HasElapsedTime;
 
-  async function allPlants(): Promise<PlantWithElapsedTime[]> {
-    return getPlants().then((json) =>
-      json
-        .map((plant: { lastWateredAt: string }) => {
-          const date = Temporal.DateTime.from(plant.lastWateredAt);
-
-          const { seconds } = Temporal.now
-            .instant()
-            .difference(Temporal.Instant.from(plant.lastWateredAt));
-
-          const SECONDS_IN_A_DAY = 86400;
-
-          const days = Math.floor(seconds / SECONDS_IN_A_DAY);
-
-          const elapsed = `${days} days ago`;
-
-          const formattedDate = Temporal.Date.from(date).toString();
-
-          return {
-            ...plant,
-            formattedDate,
-            elapsed,
-            compare: date,
-          };
-        })
-
-        .sort(
-          (
-            a: { compare: Temporal.DateTime },
-            b: { compare: Temporal.DateTime }
-          ) => Temporal.DateTime.compare(a.compare, b.compare)
-        )
-    );
+  async function allPlants() {
+    return getPlants().then(calculateElapsedTime);
   }
 
-  onMount(async () => {
-    plants = allPlants();
-  });
+  async function calculateElapsedTime(plants): Promise<PlantWithElapsedTime[]> {
+    return plants
+      .map((plant: { lastWateredAt: string }) => {
+        const date = Temporal.DateTime.from(plant.lastWateredAt);
+
+        const { seconds } = Temporal.now
+          .instant()
+          .difference(Temporal.Instant.from(plant.lastWateredAt));
+
+        const SECONDS_IN_A_DAY = 86400;
+
+        const days = Math.floor(seconds / SECONDS_IN_A_DAY);
+
+        const elapsed = `${days} days ago`;
+
+        const formattedDate = Temporal.Date.from(date).toString();
+
+        return {
+          ...plant,
+          formattedDate,
+          elapsed,
+          compare: date,
+        };
+      })
+
+      .sort(
+        (
+          a: { compare: Temporal.DateTime },
+          b: { compare: Temporal.DateTime }
+        ) => Temporal.DateTime.compare(a.compare, b.compare)
+      );
+  }
 
   async function handleDelete(id: number) {
     if (window.confirm("Delete plant?")) {
