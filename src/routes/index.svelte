@@ -14,7 +14,7 @@
   import { Temporal } from "proposal-temporal";
   import type { Plant } from "@prisma/client";
 
-  const dev = process.env.NODE_ENV === "development";
+  const dev = true; // TODO: Be able to set this during build
 
   export let initPlants;
 
