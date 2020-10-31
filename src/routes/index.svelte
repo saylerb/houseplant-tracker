@@ -16,9 +16,13 @@
 
   export let initPlants;
 
-  let plants: Promise<PlantWithElapsedTime[]> = calculateElapsedTime(
-    initPlants
-  );
+  // TODO: Remove mixed type here and manage updating the list of plants better
+  //     - synchronously setting plants allows us to SSR render the list of plants
+  //     - async setting allows us to refresh the list with a loading indicator after
+  //       adding, removing or marking a plant as watered.
+  let plants:
+    | Promise<PlantWithElapsedTime[]>
+    | PlantWithElapsedTime[] = calculateElapsedTime(initPlants);
 
   let value = "";
 
@@ -34,7 +38,7 @@
     return getPlants().then(calculateElapsedTime);
   }
 
-  async function calculateElapsedTime(plants): Promise<PlantWithElapsedTime[]> {
+  function calculateElapsedTime(plants): PlantWithElapsedTime[] {
     return plants
       .map((plant: { lastWateredAt: string }) => {
         const date = Temporal.DateTime.from(plant.lastWateredAt);
@@ -44,11 +48,8 @@
           .difference(Temporal.Instant.from(plant.lastWateredAt));
 
         const SECONDS_IN_A_DAY = 86400;
-
         const days = Math.floor(seconds / SECONDS_IN_A_DAY);
-
         const elapsed = `${days} days ago`;
-
         const formattedDate = Temporal.Date.from(date).toString();
 
         return {
