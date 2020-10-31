@@ -5,6 +5,8 @@ import bodyParser from "body-parser";
 import * as sapper from "@sapper/server";
 import cookie from "cookie";
 import jwt from "jsonwebtoken";
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
 
 const { PORT, NODE_ENV, JWT_SECRET } = process.env;
 const dev = NODE_ENV === "development";
@@ -24,7 +26,25 @@ polka()
   .use(
     compression({ threshold: 0 }),
     sirv("static", { dev }),
-    sapper.middleware()
+    sapper.middleware({
+      session: async (request, response) => {
+        const { userId: id } = request;
+
+        if (!id) {
+          return {}
+        }
+
+        const person = await prisma.person.findOne({
+          where: { id },
+        });
+
+        const { password, ...rest } = person;
+
+        return {
+          person: rest,
+        };
+      },
+    })
   )
   .listen(PORT, (err: any) => {
     if (err) console.log("error", err);

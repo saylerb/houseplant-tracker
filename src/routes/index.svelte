@@ -1,20 +1,18 @@
 <script context="module">
-  export async function preload() {
+  export const preload = async function () {
     return this.fetch("/index.json")
       .then((response) => {
         if (response.status === 200) return response.json();
         if (response.status === 403) return this.redirect(302, "login");
       })
       .then((json) => ({ initPlants: json }));
-  }
+  };
 </script>
 
 <script lang="ts">
   import { getPlants, updatePlant, deletePlant, createPlant } from "../api";
   import { Temporal } from "proposal-temporal";
   import type { Plant } from "@prisma/client";
-
-  const dev = true; // TODO: Be able to set this during build
 
   export let initPlants;
 
@@ -184,8 +182,7 @@
         </li>
       {/each}
     </ul>
-  {:catch error}
-    There was a problem fetching the list of plants
-    {#if dev}{error.stack}{/if}
+  {:catch}
+    There was a problem fetching the list of plants!
   {/await}
 </main>

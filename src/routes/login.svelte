@@ -1,9 +1,19 @@
 <script type="ts">
-  import { goto } from "@sapper/app";
-  import { currentLoggedInUser } from "../stores";
+  import { goto, stores } from "@sapper/app";
+
+  const { session } = stores();
 
   let created;
   let loggedIn;
+
+  function updateSession(person) {
+    session.update((session) => {
+      return {
+        ...session,
+        person,
+      };
+    });
+  }
 
   async function handleSubmit(event) {
     const formElements: HTMLFormElement[] = event.currentTarget.elements;
@@ -27,8 +37,8 @@
           return response.json();
         }
       })
-      .then((json) => {
-        currentLoggedInUser.set(json);
+      .then((person) => {
+        updateSession(person);
         goto("/");
       });
   }
@@ -55,8 +65,8 @@
           return response.json();
         }
       })
-      .then((json) => {
-        currentLoggedInUser.set(json);
+      .then((person) => {
+        updateSession(person);
         goto("/");
       });
   }

@@ -1,7 +1,15 @@
 <script lang="ts">
-  import { currentLoggedInUser } from "../stores";
+  import { stores, goto } from "@sapper/app";
 
-  import { goto } from "@sapper/app";
+  const { session } = stores();
+
+  let person = $session.person;
+
+  // Re-render the nav when the logged in person changes
+  $: {
+    person = $session.person;
+  }
+
   export let segment: string;
 </script>
 
@@ -80,15 +88,20 @@
         about
       </a>
     </li>
-    {#if $currentLoggedInUser}
-      <li><a href="login">{$currentLoggedInUser.name}</a></li>
+    {#if person}
+      <li><a href="login">{person.name}</a></li>
       <li>
         <button
           class="logout"
           on:click={() => {
             fetch('/logout.json').then((response) => {
               if (response.status === 200) {
-                currentLoggedInUser.set(undefined);
+                session.update((session) => {
+                  // remove person from store
+                  const { person, ...rest } = session;
+
+                  return rest;
+                });
                 goto('./login');
               } else {
                 throw Error('Could not log you out!');
