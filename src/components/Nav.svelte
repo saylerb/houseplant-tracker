@@ -63,6 +63,7 @@
     display: inline-block;
     font-weight: 300;
     font-family: inherit;
+    color: inherit;
     font-size: inherit;
     line-height: inherit;
     padding: 1em 0.5em;
@@ -80,7 +81,7 @@
   <ul>
     <li>
       <a aria-current={segment === undefined ? 'page' : undefined} href=".">
-        home
+        houseplant 🌱 life
       </a>
     </li>
     <li>
@@ -89,7 +90,11 @@
       </a>
     </li>
     {#if person}
-      <li><a href="login">{person.name}</a></li>
+      <li>
+        <a
+          aria-current={segment === 'login' ? 'page' : undefined}
+          href="login">{person.name}</a>
+      </li>
       <li>
         <button
           class="logout"
@@ -110,7 +115,11 @@
           }}>log out</button>
       </li>
     {:else}
-      <li><a href="login">log in</a></li>
+      <li>
+        <a
+          aria-current={segment === 'login' ? 'page' : undefined}
+          href="login">log in</a>
+      </li>
     {/if}
   </ul>
 </nav>
