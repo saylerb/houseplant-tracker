@@ -7,16 +7,16 @@ export async function get(req, res) {
   const one = await prisma.plant.findOne({ where: { id: parseInt(slug) } });
 
   res.writeHead(200, {
-    "Content-Type" : "application/json"
-  })
+    "Content-Type": "application/json",
+  });
 
-  res.end(JSON.stringify(one))
+  res.end(JSON.stringify(one));
 }
 
 export async function put(req, res) {
   const { slug } = req.params;
 
-  const { lastWateredAt, name } = req.body;
+  const { lastWateredAt, name, description } = req.body;
 
   const lastWateredAtDate = new Date(lastWateredAt);
 
@@ -25,6 +25,7 @@ export async function put(req, res) {
     data: {
       name,
       lastWateredAt: lastWateredAtDate,
+      description,
     },
   });
   res.writeHead(200, {
