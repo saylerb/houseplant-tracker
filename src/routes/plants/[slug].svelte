@@ -18,6 +18,7 @@
 </script>
 
 <script lang="ts">
+  import { goto } from "@sapper/app";
   import { updatePlant } from "../../api";
 
   export let plant;
@@ -31,6 +32,8 @@
     const data = { id, name, lastWateredAt };
 
     plant = await updatePlant(data);
+
+    goto("/");
   }
 </script>
 
