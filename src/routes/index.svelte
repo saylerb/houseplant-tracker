@@ -1,5 +1,7 @@
-<script context="module">
-  export const preload = async function () {
+<script lang="ts" context="module">
+  import type { Preload } from "@sapper/common";
+
+  export const preload: Preload = async function (this) {
     return this.fetch("/index.json")
       .then((response) => {
         if (response.status === 200) return response.json();
