@@ -13,11 +13,13 @@ const dev = NODE_ENV === "development";
 
 polka()
   .use((request, response, next) => {
-    const { token } = cookie.parse(request.headers.cookie);
+    if (typeof request.headers.cookie !== "undefined") {
+      const { token } = cookie.parse(request.headers.cookie);
 
-    if (typeof token !== "undefined" || token === "") {
-      const { userId } = jwt.verify(token, JWT_SECRET);
-      request.userId = userId;
+      if (typeof token !== "undefined" || token === "") {
+        const { userId } = jwt.verify(token, JWT_SECRET);
+        request.userId = userId;
+      }
     }
 
     next();
@@ -31,7 +33,7 @@ polka()
         const { userId: id } = request;
 
         if (!id) {
-          return {}
+          return {};
         }
 
         const person = await prisma.person.findOne({
